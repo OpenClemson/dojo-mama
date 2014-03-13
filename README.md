@@ -5,6 +5,7 @@ License
 -------
 
 dojo-mama: a JavaScript framework
+
 Copyright (C) 2014 Clemson University
 
 This library is free software; you can redistribute it and/or
