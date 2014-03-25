@@ -1,15 +1,5 @@
-dojo-mama
-=========
-
-To build:
-
-	make
-
-License
--------
-
+/*
 dojo-mama: a JavaScript framework
-
 Copyright (C) 2014 Clemson University
 
 This library is free software; you can redistribute it and/or
@@ -25,8 +15,19 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 
-Credits
--------
-
-Entypo pictograms by Daniel Bruce — www.entypo.com
+/**
+ * This file is used to reconfigure parts of the loader at runtime for this application.
+ */
+require({
+	baseUrl: '',
+	packages: [
+		'dojo',
+		'dijit',
+		'dojox',
+		'dojo-mama',
+		'app'
+	]
+// Require `app`. This loads the main application module, `app/main`, since we registered the `app` package above.
+}, ['app']);

@@ -1,0 +1,35 @@
+{
+	"name": "my.Clemson",
+	"version": "0.2.5",
+	"description": "dojo-mama demo",
+	"keywords": ["JavaScript", "Dojo", "Mobile", "Responsive", "Mama"],
+	"maintainers": [{
+		"name": "Dan Lewis",
+		"email": "jdanl@clemson.edu"
+	},{
+		"name": "Nick Watts",
+		"email": "watts4@clemson.edu"
+	}],
+	"contributors": [{
+		"name": "Doug Dawson",
+		"email": "dawson3@clemson.edu"
+	},{
+		"name": "Josh Groppe",
+		"email": "charle8@g.clemson.edu"
+	}],
+	"main": "main",
+	"dependencies": {
+		"dojo": "1.9.0",
+		"dijit": "1.9.0",
+		"dojox": "1.9.0",
+		"util": "1.9.0",
+		"dojo-mama": "0.0.3"
+	},
+	"licenses": [
+		{
+			"type": "LGPL 2.1",
+			"url": "https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html"
+		}
+	],
+	"dojoBuild": "package.js"
+}

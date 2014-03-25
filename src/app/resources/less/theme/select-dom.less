@@ -1,0 +1,127 @@
+/*
+dojo-mama: a JavaScript framework
+Copyright (C) 2014 Clemson University
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+.select{
+	border: 1px solid #cdcbc3;
+	-moz-border-radius-topleft: 3px;
+	-moz-border-radius-topright: 3px;
+	-webkit-border-top-left-radius: 3px;
+	-webkit-border-top-right-radius: 3px;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+
+	font-weight: normal;
+	text-align: right;
+	color: #373737;
+
+	height: 30px;
+
+	.label{
+		text-align: left !important;
+		vertical-align: center;
+		height: 100%;
+		display: inline;
+		float: left;
+		padding-top: 5px;
+		padding-bottom: 5px;
+		padding-left: 3px;
+		cursor: default;
+	}
+
+	.arrow{
+		border: none;
+		width: 16px;
+		font-size: 16px;
+		height: 100%;
+		border-left: 1px solid #cdcbc3;
+		display: inline;
+		padding: 0;
+	}
+}
+
+.select.closed{
+	-moz-border-radius-bottomleft: 3px;
+	-moz-border-radius-bottomright: 3px;
+	-webkit-border-bottom-left-radius: 3px;
+	-webkit-border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+
+.popup{
+	position: absolute;
+	border: 1px solid #cdcbc3;
+	z-index: 1000;
+	background-color: white;
+
+	.popupContainer{
+		background-color: transparent;
+		overflow-y: visible;
+		margin: 0;
+		padding: 0;
+	}
+
+	.popupItem{
+		text-align: left;
+		color: black;
+		width: auto;
+		list-style: none;
+		padding-left: 3px;
+		cursor: default;
+	}
+
+	.selected{
+		background-color: #87826a;
+		color: white;
+	}
+}
+
+.popupContainer.mobile{
+	-moz-border-radius: 15px;
+	-webkit-border-radius: 15px;
+	border-radius: 15px;
+	border-radius: 15px;
+
+	li {
+		padding: .5em;
+		border-bottom: 1px solid #ddd;
+	}
+}
+
+#popupBackdrop{
+	position: absolute;
+	visibility: hidden;
+	background-color: black;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 999;
+
+	zoom: 1;
+	filter: alpha(opacity=50);
+	opacity: 0.5;
+}
+
+#sizeChecker{
+	position: absolute;
+	visibility: hidden;
+	font-weight: normal;
+
+}

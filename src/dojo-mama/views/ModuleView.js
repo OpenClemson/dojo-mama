@@ -1,15 +1,5 @@
-dojo-mama
-=========
-
-To build:
-
-	make
-
-License
--------
-
+/*
 dojo-mama: a JavaScript framework
-
 Copyright (C) 2014 Clemson University
 
 This library is free software; you can redistribute it and/or
@@ -25,8 +15,20 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 
-Credits
--------
+define(['dojo/_base/declare',
+		'dojo-mama/views/_ModuleViewMixin',
+		'dojox/mobile/Pane',
+		'dijit/_Container'
+], function(declare, ModuleViewMixin, Pane, Container) {
 
-Entypo pictograms by Daniel Bruce — www.entypo.com
+	// module:
+	//     dojo-mama/views/ModuleView
+
+	return declare([Pane, Container, ModuleViewMixin], {
+		// summary:
+		//     A base module view
+		baseClass: ''
+	});
+});

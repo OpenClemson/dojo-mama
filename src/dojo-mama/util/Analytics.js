@@ -1,15 +1,5 @@
-dojo-mama
-=========
-
-To build:
-
-	make
-
-License
--------
-
+/*
 dojo-mama: a JavaScript framework
-
 Copyright (C) 2014 Clemson University
 
 This library is free software; you can redistribute it and/or
@@ -25,8 +15,32 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 
-Credits
--------
-
-Entypo pictograms by Daniel Bruce — www.entypo.com
+define(['dojo/_base/declare',
+		'dojo/_base/kernel',
+		'dojo/topic'
+], function(declare, kernel, topic) {
+	return declare([], {
+		startup: function() {
+			if (kernel.global.ga) {
+				var track = this.track;
+				console.log('Google Analytics enabled');
+				track('send', 'pageview');
+				topic.subscribe('/dojo-mama/analytics', track);
+				topic.subscribe('/dojo-mama/activateModule', function(module) {
+					track('send', 'event', 'activateModule', module.name);
+				});
+			}
+		},
+		track: function() {
+			var ga = kernel.global.ga;
+			if (ga) {
+				console.log('Analytics:', arguments);
+				ga.apply(this, arguments);
+			} else {
+				console.warn('Google Analytics object is undefined.');
+			}
+		}
+	});
+});

@@ -1,0 +1,7 @@
+dist
+profiles/app-*.profile.js
+src/dojo
+src/dojox
+src/dijit
+src/util
+src/app/resources/css
