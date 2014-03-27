@@ -3,6 +3,7 @@ dojo-mama
 
 To build:
 
+	make install
 	make
 
 License
