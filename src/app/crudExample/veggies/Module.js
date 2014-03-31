@@ -1,6 +1,6 @@
 /*
 dojo-mama: a JavaScript framework
-Copyright (C) 2014 Clemson University
+Copyright (C) 2014 Omnibond Systems LLC
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -17,21 +17,21 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-@import "variables.less";
-
-/* dojo-mama css */
-@import "../../../dojo-mama/layout/responsiveTwoColumn/resources/layout.less";
-
-/* dojox/mobile css */
-@import "./dojox-mobile.less";
-
-/* custom theme */
-@import './theme/main.less';
-
-/* module css */
-@import './modules/example.less';
-@import './modules/feedback.less';
-@import './modules/crudExample.less';
-@import './modules/help.less';
-@import './modules/index.less';
-@import './modules/404.less';
+define(["dojo/_base/declare",
+		"app/util/crud/Module",
+		'app/util/crud/DisplayView',
+		"app/util/crud/CreateView",
+		'app/util/crud/ListView',
+		"app/util/crud/EditView"
+], function(declare, Module, DisplayView, CreateView, ListView, EditView) {
+	return declare([Module], {
+		'class': 'veggiesModule',
+		// serviceUrl: String
+		//     The API endpoint for CRUD data requests
+		serviceUrl: 'veggies',
+		// dataType: String
+		//     The type of CRUD data, used with app/util/crud/TextMixin
+		dataType: 'veggies',
+		listItemRightText: 'label'
+	});
+});

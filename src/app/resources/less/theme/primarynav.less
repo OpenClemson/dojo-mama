@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 /* Colors for primary nav items and subnav */
 
 @exampleColor: rgb(234,106,32);
+@crudExampleColor: rgb(82,45,128);
 
 #genPrimaryNavColor(@name, @color) {
 	.dmPrimaryNavItem_@{name} {
@@ -134,6 +135,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 }
 
 #genPrimaryNavColor(example, @exampleColor);
+#genPrimaryNavColor(crudExample, @crudExampleColor);
 
 /* Content in primary nav items in tablet root view */
 
@@ -147,12 +149,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 }
 
 #genModuleContent(example, 'Demo module');
+#genModuleContent(crudExample, 'Demo Crud module');
 
 /* Primary nav icons */
 
 .dmPrimaryNavItem_example {
 	.dmPrimaryNavItemIcon { .icon-graduation; }
 }
+
+.dmPrimaryNavItem_crudExample {
+	.dmPrimaryNavItemIcon { .icon-pencil; }
+}
+
 
 .dmPrimaryNav {
 	background-color: rgb(231, 231, 222);

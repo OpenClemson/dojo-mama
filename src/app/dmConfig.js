@@ -28,7 +28,8 @@ define({
 	nav: {
 		/* navigational elements; each element is a module key */
 		primary: [
-			'example'
+			'example',
+			'crudExample'
 		],
 		/* secondary links show up in the meta nav: */
 		secondary: [
@@ -52,6 +53,11 @@ define({
 			title: 'Example',
 			moduleId: 'app/example/Module'
 		},
+		crudExample: {
+			title: 'Crud Example',
+			moduleId: 'app/crudExample/Module',
+			modules: ['veggies', 'fruits']
+		},
 
 		/* Secondary  */
 		feedback: {
@@ -63,6 +69,21 @@ define({
 			title: 'Support',
 			moduleId: 'app/help/Module',
 			linkText: true
+		},
+
+		/* Module Groups */
+		veggies: {
+			title: 'Veggies',
+			moduleId: 'app/crudExample/veggies/Module',
+			selectedPrimaryNavItem: 'Veggies',
+			baseServiceUrl: 'srv/crudExample/'
+		},
+
+		fruits: {
+			title: 'Fruits',
+			moduleId: 'app/crudExample/fruits/Module',
+			selectedPrimaryNavItem: 'fruits',
+			baseServiceUrl: 'srv/crudExample/'
 		}
 
 	}

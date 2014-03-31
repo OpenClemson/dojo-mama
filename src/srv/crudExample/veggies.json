@@ -1,0 +1,306 @@
+{
+	"properties": {
+		"types": {
+			"defaults": {
+				"creatable": false,
+				"emptyLabel": "NoLabel"
+			},
+			"good": {
+				"categoryLabel": "Good Veggies",
+				"creatable": true,
+				"createLabel": "Add Veggie"
+			},
+			"meh": {
+				"categoryLabel": "Meh Veggies"
+			},
+			"bad": {
+				"categoryLabel": "BAAD Veggies"
+			}
+		},
+		"displayOrder": [
+			"good",
+			"meh",
+			"bad"
+		],
+		"display": true,
+		"edit": true,
+		"create": true,
+		"remove": true,
+		"create_properties": {
+			"good": {
+				"deletable": true,
+				"meta": {
+					"type": "good"
+				},
+				"defaults": {
+					"required": true,
+					"editable": true,
+					"type": "text"
+				},
+				"fields": [
+					{
+						"id": "label",
+						"label": "Veggie Name"
+					},
+					{
+						"id": "color",
+						"type": "select",
+						"label": "Color",
+						"options": [
+							{ "label" : "None", "value": 0 },
+							{ "label" : "Green", "value": 1 },
+							{ "label" : "Not Green", "value": 2 }
+						]
+					}
+				]
+			}
+		}			
+	},
+	"items": [
+		{
+			"data": {
+				"label": "Squash",
+				"color": 2,
+				"objectId": "veggies#good#0",
+				"objectURI": "veggies/veggies%23good%230"
+			},
+			"properties": {
+				"deletable": true,
+				"meta": {
+					"type": "good"
+				},
+				"defaults": {
+					"required": true,
+					"editable": true,
+					"type": "text"
+				},
+				"fields": [
+					{
+						"id": "label",
+						"label": "Veggie Name"
+					},
+					{
+						"id": "color",
+						"type": "select",
+						"label": "Color",
+						"options": [
+							{ "label" : "None", "value": 0 },
+							{ "label" : "Green", "value": 1 },
+							{ "label" : "Not Green", "value": 2 }
+						]
+					}
+				]
+			}
+		},
+		{
+			"data": {
+				"label": "Green Beans",
+				"color": 1,
+				"objectId": "veggies#good#1",
+				"objectURI": "veggies/veggies%23good%231"
+			},
+			"properties": {
+				"deletable": true,
+				"meta": {
+					"type": "good"
+				},
+				"defaults": {
+					"required": true,
+					"editable": true,
+					"type": "text"
+				},
+				"fields": [
+					{
+						"id": "label",
+						"label": "Veggie Name"
+					},
+					{
+						"id": "color",
+						"type": "select",
+						"label": "Color",
+						"options": [
+							{ "label" : "None", "value": 0 },
+							{ "label" : "Green", "value": 1 },
+							{ "label" : "Not Green", "value": 2 }
+						]
+					}
+				]
+			}
+		},
+		{
+			"data": {
+				"label": "Tomato",
+				"color": 2,
+				"objectId": "veggies#good#2",
+				"objectURI": "veggies/veggies%23good%232"
+			},
+			"properties": {
+				"deletable": true,
+				"meta": {
+					"type": "good"
+				},
+				"defaults": {
+					"required": true,
+					"editable": true,
+					"type": "text"
+				},
+				"fields": [
+					{
+						"id": "label",
+						"label": "Veggie Name"
+					},
+					{
+						"id": "color",
+						"type": "select",
+						"label": "Color",
+						"options": [
+							{ "label" : "None", "value": 0 },
+							{ "label" : "Green", "value": 1 },
+							{ "label" : "Not Green", "value": 2 }
+						]
+					}
+				]
+			}
+		},
+		{
+			"data": {
+				"label": "Sprouts",
+				"color": 1,
+				"objectId": "veggies#meh#0",
+				"objectURI": "veggies/veggies%23meh%230"
+			},
+			"properties": {
+				"deletable": false,
+				"meta": {
+					"type": "meh"
+				},
+				"defaults": {
+					"required": true,
+					"editable": true,
+					"type": "text"
+				},
+				"fields": [
+					{
+						"id": "label",
+						"label": "Veggie Name"
+					},
+					{
+						"id": "color",
+						"type": "select",
+						"label": "Color",
+						"options": [
+							{ "label" : "None", "value": 0 },
+							{ "label" : "Green", "value": 1 },
+							{ "label" : "Not Green", "value": 2 }
+						]
+					}
+				]
+			}
+		},
+		{
+			"data": {
+				"label": "Lettuce",
+				"color": 1,
+				"objectId": "veggies#meh#1",
+				"objectURI": "veggies/veggies%23meh%231"
+			},
+			"properties": {
+				"deletable": false,
+				"meta": {
+					"type": "meh"
+				},
+				"defaults": {
+					"required": true,
+					"editable": true,
+					"type": "text"
+				},
+				"fields": [
+					{
+						"id": "label",
+						"label": "Veggie Name"
+					},
+					{
+						"id": "color",
+						"type": "select",
+						"label": "Color",
+						"options": [
+							{ "label" : "None", "value": 0 },
+							{ "label" : "Green", "value": 1 },
+							{ "label" : "Not Green", "value": 2 }
+						]
+					}
+				]
+			}
+		},
+		{
+			"data": {
+				"label": "Carrots",
+				"color": 2,
+				"objectId": "veggies#bad#0",
+				"objectURI": "veggies/veggies%23bad%230"
+			},
+			"properties": {
+				"deletable": false,
+				"meta": {
+					"type": "bad"
+				},
+				"defaults": {
+					"required": true,
+					"editable": true,
+					"type": "text"
+				},
+				"fields": [
+					{
+						"id": "label",
+						"label": "Veggie Name"
+					},
+					{
+						"id": "color",
+						"type": "select",
+						"label": "Color",
+						"options": [
+							{ "label" : "None", "value": 0 },
+							{ "label" : "Green", "value": 1 },
+							{ "label" : "Not Green", "value": 2 }
+						]
+					}
+				]
+			}
+		},
+		{
+			"data": {
+				"label": "Leeks",
+				"color": 1,
+				"objectId": "veggies#bad#1",
+				"objectURI": "veggies/veggies%23bad%231"
+			},
+			"properties": {
+				"deletable": false,
+				"meta": {
+					"type": "bad"
+				},
+				"defaults": {
+					"required": true,
+					"editable": true,
+					"type": "text"
+				},
+				"fields": [
+					{
+						"id": "label",
+						"label": "Veggie Name"
+					},
+					{
+						"id": "color",
+						"type": "select",
+						"label": "Color",
+						"options": [
+							{ "label" : "None", "value": 0 },
+							{ "label" : "Green", "value": 1 },
+							{ "label" : "Not Green", "value": 2 }
+						]
+					}
+				]
+			}
+		}
+	]
+}

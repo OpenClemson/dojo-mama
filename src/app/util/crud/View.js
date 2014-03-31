@@ -1,6 +1,6 @@
 /*
 dojo-mama: a JavaScript framework
-Copyright (C) 2014 Clemson University
+Copyright (C) 2014 Omnibond Systems, LLC
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -17,21 +17,21 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-@import "variables.less";
+define(['dojo/_base/declare',
+		'dojo-mama/views/ModuleScrollableView',
+		'app/util/crud/TextMixin'
+], function(declare, ModuleScrollableView, TextMixin) {
+	
+	// module:
+	//     app/util/crud/View
 
-/* dojo-mama css */
-@import "../../../dojo-mama/layout/responsiveTwoColumn/resources/layout.less";
+	return declare([ModuleScrollableView, TextMixin], {
+		// summary:
+		//     The base view for CRUD views
 
-/* dojox/mobile css */
-@import "./dojox-mobile.less";
+		// viewType: String
+		//     The type of this view, used with nls resources (app/util/crud/TextMixin)
+		viewType: null
 
-/* custom theme */
-@import './theme/main.less';
-
-/* module css */
-@import './modules/example.less';
-@import './modules/feedback.less';
-@import './modules/crudExample.less';
-@import './modules/help.less';
-@import './modules/index.less';
-@import './modules/404.less';
+	});
+});

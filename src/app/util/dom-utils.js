@@ -38,15 +38,8 @@ define(['dojo/_base/declare',
 	//     Map of CSS selectors to icon font glyphs.
 	var cufonGlyphMap = {
 		// nav
-		'.dmPrimaryNavItem_academics .dmPrimaryNavItemIcon': 'e636',  //  icon-graduation
-		'.dmPrimaryNavItem_athletics .dmPrimaryNavItemIcon': 'e71c',  //  icon-paw
-		'.dmPrimaryNavItem_map .dmPrimaryNavItemIcon': 'e613',  //  icon-map
-		'.dmPrimaryNavItem_directory .dmPrimaryNavItemIcon': 'e610',  //  icon-vcard
-		'.dmPrimaryNavItem_news .dmPrimaryNavItemIcon': 'e61f',  //  icon-chat
-		'.dmPrimaryNavItem_events .dmPrimaryNavItemIcon': 'e63f',  //  icon-calendar
-		'.dmPrimaryNavItem_safety .dmPrimaryNavItemIcon': 'e71d',  //  icon-cross
-		'.dmPrimaryNavItem_campus-life .dmPrimaryNavItemIcon': 'e637',  //  icon-book
-		'.dmPrimaryNavItem_profile .dmPrimaryNavItemIcon': 'e60d',  //  icon-user
+		'.dmPrimaryNavItem_crudExample .dmPrimaryNavItemIcon': 'e606',  //  icon-user
+		'.dmPrimaryNavItem_example .dmPrimaryNavItemIcon': 'e636',  //  icon-user
 		'.dmSubNavBackButton div': 'e691',  // icon-back
 		'.dmMenuBarPopupItem': 'e696',  // icon-list
 		// custom classes
@@ -56,7 +49,7 @@ define(['dojo/_base/declare',
 		'.locationButton': 'e615',  // icon-location2
 		'.prevMonthButton': 'e6d5',  // icon-arrow-left7
 		'.nextMonthButton': 'e6d8',  // icon-uniE6D8
-		// profile link arrows
+		// crud link arrows
 		'.crudListView .dmListItem > a > .dmRightIcon': 'e6d0', // icon-arrow-right5
 		// icon classes
 		'.icon-user': 'e60d',

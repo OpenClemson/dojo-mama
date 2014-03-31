@@ -1,3 +1,4 @@
+<?php
 /*
 dojo-mama: a JavaScript framework
 Copyright (C) 2014 Clemson University
@@ -16,22 +17,17 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
+	
+//this file should display or redirect to a login page.
+//but for the demos let's just give them a session id and send them back to the app
 
-@import "variables.less";
+session_start();
 
-/* dojo-mama css */
-@import "../../../dojo-mama/layout/responsiveTwoColumn/resources/layout.less";
+$_SESSION['authenticated'] = true;
+$url = '/';
+if(isset($_GET['url'])){
+	$url = $_GET['url'];
+}
+header('Location: '.$url);
 
-/* dojox/mobile css */
-@import "./dojox-mobile.less";
-
-/* custom theme */
-@import './theme/main.less';
-
-/* module css */
-@import './modules/example.less';
-@import './modules/feedback.less';
-@import './modules/crudExample.less';
-@import './modules/help.less';
-@import './modules/index.less';
-@import './modules/404.less';
+?>
