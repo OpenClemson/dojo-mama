@@ -1,6 +1,6 @@
 /*
 dojo-mama: a JavaScript framework
-Copyright (C) 2014 Clemson University
+Copyright (C) 2015 Clemson University
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -11,236 +11,322 @@ This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 Lesser General Public License for more details.
-
+        
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-
 define(['dojo/_base/declare',
-		'dojo/_base/kernel',
 		'dojo/_base/lang',
-		'dojo/_base/window',
-		'dojo/dom-class',
-		'dojo/router',
-		'dojo/topic',
-		'dojo-mama/util/toaster'
-], function(declare, kernel, lang, win, domClass, router, topic, toaster) {
+		'dojo/Deferred',
+		'dojo/hash',
+		'dojo/topic'
+], function(declare, lang, Deferred, hash, topic) {
 
 	// module:
 	//     dojo-mama/ModuleManager
 
 	return declare([], {
 		// summary:
-		//     Manages the launching and routing of modules.
+		//     Manages the instantiation, caching, and routing of modules and their views.
+		//     The module manager publishes the following topics:
+		//
+		//     '/dojo-mama/moduleLoadError'
+		//           Published when a require error occurs.
+		//           Receives the error.
+		//     '/dojo-mama/startLoadingModule'
+		//           Published when a module begins loading.
+		//           Receives the module name.
+		//     '/dojo-mama/doneLoadingModule'
+		//           Published when a module finishes loading.
+		//           Receives the module name.
+		//     '/dojo-mama/routeError'
+		//           Published when a route error occurs.
+		//           Receives the route that caused the error.
 
 		// activeModule: [private] Object
-		//     The currently displayed module
+		//     The currently active module
 		activeModule: null,
 		// config: [private] Object
-		//     The dmConfig config object
+		//     The module configuration
 		config: null,
-		// getMode: Function
-		//     Set by dojo-mama/Layout, returns
-		//     the current mode, 'phone' or 'tablet'
-		getMode: null,
-		// lastRoute: [private] String
-		//     The last route matched by the router
+		// hashChangeTopicHandle: [private] Object
+		//     The hashchange dojo/topic handle
+		hashChangeTopicHandle: null,
+		// lastRoute: [private] Object
+		//     The last route object
 		lastRoute: null,
+		// newPath: [private] String
+		//     The current hash
+		newPath: '',
+		// oldPath: [private] String
+		//     The last hash
+		oldPath: '',
 		// modules: [private] Object
-		//     An object mapping a module ID to its instance.
+		//     The module cache
 		modules: {},
-		// show404Handle: [private] Object
-		//     Handle for subscription to /dojo-mama/show404 topic
-		show404Handle: null,
-		// showing404: [private] Boolean
-		//     Whether or not the 404 module is currently being displayed.
-
-		constructor: function(args) {
+		// moduleRegEx: [private] RegEx
+		//     The regular expression used to match module names in routes
+		moduleRegEx: /^\/([^\/]+)/,
+		
+		constructor: function(/*Object*/ args) {
 			lang.mixin(this, args);
-			this.config = kernel.global.dmConfig;
+			console.log('[dojo-mama] instantiating module manager');
 		},
 
 		startup: function() {
 			// summary:
 			//     Start up the module manager
+			// returns:
+			//     A dojo/Deferred that resolves after the inital
+			//     routing completes
 
-			// subscribe to 404 topic
-			this.show404Handle = topic.subscribe('/dojo-mama/show404', lang.hitch(this, this.show404));
+			var dfd;
 
-			// register routes
-			var hash = kernel.global.location.hash,
-				handleRoute = lang.hitch(this, this.handleRoute);
-			// index (a special root module)
-			router.register(this.config.baseRoute, handleRoute);
-			// module root view
-			router.register('/:module', handleRoute);
-			router.register('/:module/', handleRoute);
-			// module view
-			router.register('/:module/*view', handleRoute);
-			// startup the router
-			router.startup();
-
-			// If we're at the index level, route to /
-			if (hash === '#' + this.config.baseRoute) {
-				// prevent flashing when refreshing #/
-				domClass.add(win.body(), 'dmRootView');
-			} else if (hash === '') {
-				// prevent flashing when refreshing #/
-				domClass.add(win.body(), 'dmRootView');
-				// route to index
-				router.go(this.config.baseRoute);
+			// verify config
+			if (!(this.config && this.config.modules)) {
+				console.error('[dojo-mama] invalid configuration');
+				return;
 			}
 
-			require.on('error', function(e) {
-				console.error('Cannot load module');
-				console.error(e);
-				var seconds = 5,
-					resetTimeNode;
-				toaster.displayMessage({
-					text: "Connection error; retrying in <span id='dmLoadErrorResetTime'></span>...",
-					containerNode: win.body(),
-					type: 'error',
-					time: -1
-				});
-				resetTimeNode = document.getElementById('dmLoadErrorResetTime');
-				(function countdown () {
-					if (seconds < 1) {
-						return location.reload(true);
-					}
-					resetTimeNode.innerHTML = seconds + " second" + (seconds == 1 ? "" : "s");
-					seconds--;
-					setTimeout(countdown, 1000);
-				}());
+			// handle any AMD errors
+			require.on('error', function(/*Object*/ e) {
+				console.error('[dojo-mama] module load error:', e);
+				topic.publish('/dojo-mama/moduleLoadError', e);
 			});
 
+			// handle current hash
+			dfd = this.handleHashChange(hash());
+
+			// subscribe to additional hash change events
+			this.hashChangeTopicHandle = topic.subscribe('/dojo/hashchange', lang.hitch(this, this.handleHashChange));
+
+			return dfd;
 		},
 
-		destroy: function() {
-			this.show404Handle.remove();
-			this.inherited(arguments);
+		handleHashChange: function(/*String*/ newHash) {
+			// summary:
+			//     Handles hashchange events
+			// newHash:
+			//     The new hash string
+			// returns:
+			//     A dojo/Deferred that resolves after the hash
+			//     change has been handled
+
+			var module, moduleName,
+				matches, route,
+				dfd = new Deferred();
+
+			// remove trailing slashes
+			if (newHash.slice(-1) === '/') {
+				newHash = newHash.slice(0, -1);
+			}
+
+			// save the old hash
+			this.oldPath = this.newPath;
+			this.newPath = newHash;
+
+			// get module name from hash
+			if (newHash === '') {
+				moduleName = 'index';
+			} else {
+				matches = this.moduleRegEx.exec(newHash);
+				if (!matches) {
+					this.handleRouteError();
+					return;
+				}
+				moduleName = matches[1];
+				route = newHash.slice(matches[0].length);
+			}
+
+			if (!route) {
+				route = '/';
+			}
+
+			// route the module
+			if (!this.config.modules.hasOwnProperty(moduleName)) {
+				console.warn('[dojo-mama] module config undefined');
+				this.handleRouteError();
+				return;
+			}
+			module = this.modules[moduleName];
+			if (module) {
+				this.routeModule(module, route);
+				dfd.resolve();
+			} else {
+				this.loadModule(moduleName).then(
+					lang.hitch(this, function(instance) {
+						this.routeModule(instance, route);
+						dfd.resolve();
+					}),
+					lang.hitch(this, function(err) {
+						console.warn('[dojo-mama]', err);
+						dfd.reject(err);
+					})
+				);
+			}
+			return dfd;
+		},
+
+		loadModule: function(/*String*/ moduleName) {
+			// summary:
+			//     Dynamically requires a module by name
+			// moduleName:
+			//     The name of the module, as defined by the config
+			// returns:
+			//     A dojo/Deferred that resolves with a reference to
+			//     the module instance
+
+			var moduleConfig = lang.mixin({}, this.config.modules[moduleName]),
+				moduleId = moduleConfig.moduleId,
+				module,
+				dfd = new Deferred();
+
+			if (this.modules[moduleName]) {
+				dfd.resolve(this.modules[moduleName]);
+				return dfd;
+			}
+
+			if (!moduleId) {
+				this.handleRouteError();
+				dfd.reject('moduleId undefined', true);
+				return dfd;
+			}
+
+			console.log('[dojo-mama] start loading module:', moduleName);
+			topic.publish('/dojo-mama/startLoadingModule', moduleName);
+			require([moduleId], lang.hitch(this, function(Module) {
+				// extend dmConfig module settings with name and reference to the full config
+				lang.mixin(moduleConfig, {
+					name: moduleName,
+					config: this.config
+				});
+				// create a cached instance of this module
+				this.modules[moduleName] = module = new Module(moduleConfig);
+				console.log('[dojo-mama] done loading module:', moduleName);
+				topic.publish('/dojo-mama/doneLoadingModule', moduleName);
+				// startup the module
+				console.log('[dojo-mama] starting up:', moduleName);
+				module.startup();
+				dfd.resolve(module);
+			}));
+
+			return dfd;
+		},
+
+		routeModule: function(/*Object*/ module, /*String*/ route) {
+			// summary:
+			//     Routes a module's view
+			// module:
+			//     The instance of the module
+			// route:
+			//     The view route to search for
+
+			console.log('[dojo-mama] routing:', module.name, route);
+			// module-relative routing, based on dojo/router/RouterBase
+			var callback, i, j, params, parameterNames, result,
+				routeEvent, routeObj,
+				routes = module.routes,
+				numRoutes = routes.length,
+				numParameters;
+
+			params = {};
+			for (i=0; i < numRoutes; ++i) {
+				routeObj = routes[i];
+				result = routeObj.route.exec(route);
+				if (result) {
+					if (routeObj.parameterNames) {
+						parameterNames = routeObj.parameterNames;
+						numParameters = parameterNames.length;
+						for (j=0; j < numParameters; ++j) {
+							params[parameterNames[j]] = result[j+1];
+						}
+					}
+					callback = routeObj.callback;
+					break;
+				}
+			}
+			if (!callback) {
+				this.handleRouteError();
+				return;
+			}
+			routeEvent = {
+				oldPath: this.oldPath,
+				newPath: this.newPath,
+				params: params
+			};
+			if (this.lastRoute) {
+				this.lastRoute.view.deactivate(routeEvent);
+			}
+			this.lastRoute = routeObj;
+			this.activateModule(module, routeEvent);
+			callback(routeEvent);
 		},
 
 		activateModule: function(/*Object*/ module, /*Object*/ e) {
 			// summary:
-			//     Helper function to activate a new module.
-			// tags:
-			//     private
+			//     Activates a module and deactivates the currently
+			//     active module.
 			// module:
 			//     The module instance to activate
 			// e:
 			//     The router event
 
-			var activeModule = this.activeModule,
-				setActiveModule;
+			var activeModule = this.activeModule;
 
 			// don't reactivate the same module
 			if (activeModule === module) {
-				module.handleRoute(e);
 				return;
 			}
 
 			// deactivate the currently active module
 			if (activeModule) {
-				activeModule.deactivate();
-				domClass.remove(win.body(), 'dmActiveModule_' + activeModule.name);
-				if (activeModule.domNode) {
-					activeModule.domNode.style.display = 'none';
-				}
+				activeModule.deactivate(e);
 			}
+
 			// activate the new module
 			this.activeModule = module;
-			this.config.activeModule = module;
-			domClass.add(win.body(), 'dmActiveModule_' + module.name);
-			topic.publish('/dojo-mama/activateModule', module);
-			this.focusModule(module);
 			module.activate(e);
 		},
 
-		handleRoute: function(/*Object*/ e) {
+		handleRouteError: function() {
 			// summary:
-			//     Route a module; a callback to router.register()
-			// tags:
-			//     private callback
-			// e:
-			//     The router event
-			console.log('handle route');
+			//      Handles route errors
 
-			var module,  // the module instance
-				moduleConfig,  // the module's config (defined in dmConfig)
-				moduleName = e.params.module || 'index',  // the module matched by the route
-				moduleId,  // the dojo path to a module (defined in dmConfig)
-				route = e.newPath;  // the route's new path (url)
-
-			moduleConfig = this.config.modules[moduleName];
-			moduleId = moduleConfig && moduleConfig.moduleId;
-
-			// ignore bad paths
-			if (!moduleId) {
-				console.warn('Module ID is undefined for route:', route);
-				moduleName = '404';
-				moduleConfig = this.config.modules[moduleName];
-				moduleId = moduleConfig && moduleConfig.moduleId;
+			var route = hash();
+			if (this.activeModule) {
+				this.activeModule.deactivate();
+				this.activeModule = null;
 			}
-			// ignore repeated routes
-			if (route === this.lastRoute) {
-				console.log('ignoring duplicate route', route);
-				return;
+			if (this.lastRoute) {
+				this.lastRoute.view.deactivate();
+				this.lastRoute = null;
 			}
-			console.log('routing', e.newPath);
-			// remember the route
-			this.lastRoute = route;
-
-			module = this.modules[moduleName];
-			if (module) {
-				// if the module has already been created, activate it
-				console.log('using cached module', module.name);
-				this.activateModule(module, e);
-			} else {
-				// otherwise, require it
-				console.log('instantiating', moduleId);
-				topic.publish('/dojo-mama/startLoadingModule', moduleName);
-				require([moduleId], lang.hitch(this, function(Module) {
-					// extend dmConfig module settings with containerNode and name
-					moduleConfig.containerNode = this.config.moduleContentNode;
-					moduleConfig.name = moduleName;
-					moduleConfig.getMode = this.getMode;
-					// create a module instance
-					module = new Module(moduleConfig);
-					// remember this instance by its moduleId
-					this.modules[moduleName] = module;
-					// initialize the module
-					module.startup();
-					topic.publish('/dojo-mama/doneLoadingModule', moduleName);
-					// activate the module
-					this.activateModule(module, e);
-				}));
-			}
+			console.error('[dojo-mama] route error', route);
+			topic.publish('/dojo-mama/routeError', route);
 		},
 
-		show404: function() {
+		destroy: function() {
 			// summary:
-			//    Show the 404 module
+			//      Destroys all loaded modules and stops routing.
 
-			console.log('show 404');
-
-			var module = this.modules['404'];
-			if (module) {
-				this.activateModule(module);
+			var k;
+			if (this.hashChangeTopicHandle) {
+				this.hashChangeTopicHandle.remove();
 			}
-			else {
-				var moduleId = this.config.modules['404'].moduleId;
-				require([moduleId], lang.hitch(this, function(Module) {
-					module = new Module({
-						containerNode: this.config.moduleContentNode,
-						getMode: this.getMode,
-						name: '404'
-					});
-					this.modules['404'] = module;
-					module.startup();
-					this.activateModule(module);
-				}));
+			for (k in this.modules) {
+				if (this.modules.hasOwnProperty(k)) {
+					this.modules[k].destroy();
+					delete this.modules[k];
+				}
 			}
+			this.activeModule = null;
+			this.config = null;
+			this.hashChangeTopicHandle = null;
+			this.lastRoute = null;
+			this.newPath = null;
+			this.oldPath = null;
 		}
+
 	});
 });

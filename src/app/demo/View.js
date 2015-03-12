@@ -16,17 +16,14 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/**
- * This file is used to reconfigure parts of the loader at runtime for this application.
- */
-require({
-	baseUrl: '',
-	packages: [
-		'app',
-		'dojo-mama',
-		'dojo',
-		'dijit',
-		'dojox'
-	]
-// Require `app`. This loads the main application module, `app/main`, since we registered the `app` package above.
-}, ['app']);
+define(['dojo/_base/declare',
+		'app/layout/Template',
+		'dojo/text!app/demo/view.html'
+], function(declare, Template, template) {
+	return declare([Template], {
+		route: '/',
+		title: 'Demo',
+		templateString: template
+
+	});
+});

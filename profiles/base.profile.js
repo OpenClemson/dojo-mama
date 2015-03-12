@@ -45,6 +45,8 @@ var profile = {
 	// This defaults to "normal" (strip all but warn and error) if not provided. Use 'none' to keep all console logs.
 	stripConsole: 'all',
 
+	useSourceMaps: 0,
+
 	// The default selector engine is not included by default in a dojo.js build in order to make mobile builds
 	// smaller. We add it back here to avoid that extra HTTP request. There is also a "lite" selector available; if
 	// you use that, you will need to set the `selectorEngine` property in `app/run.js`, too. (The "lite" engine is
@@ -64,8 +66,22 @@ var profile = {
 			// all conditional dependencies in `app/main`, we do not want to have to make extra HTTP requests for such
 			// tiny files.
 			include: [
-				'dojo-mama/layout/responsiveTwoColumn/Layout',
-				'dojo-mama/layout/responsiveTwoColumn/index/Module'
+				// base dependencies
+				'dojo/request',
+				'dojo/request/xhr',
+				'dojo/request/handlers',
+				// main dependencies
+				'app/dmConfig',
+				'app/layout/layout',
+				'app/main',
+				'app/run',
+				'dojo-mama/ModuleManager',
+				// dojo dependencies
+				'dojo/dom-class',
+				'dojo/has',
+				'dojo/json',
+				'dojo/ready',
+				'dojo/text'
 			],
 
 			// By default, the build system will try to include `dojo/main` in the built `dojo/dojo` layer, which adds

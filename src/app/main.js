@@ -1,6 +1,6 @@
 /*
 dojo-mama: a JavaScript framework
-Copyright (C) 2014 Clemson University
+Copyright (C) 2015 Clemson University
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -14,9 +14,8 @@ Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-
 /**
  * This file is the application's main JavaScript file. It is listed as a dependency in run.js and will automatically
  * load when run.js loads.
@@ -27,57 +26,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 define(['require'], function (require) {
 	require([
-		'dojo-mama/layout/responsiveTwoColumn/Layout',
-		'app/dmConfig',
-		'app/util/dom-utils',
-		'dojo/dom-class',
-		'dojo/has',
+		/* Additional dependencies here should also be added to the base profile to minimize initial requests. */
 		'dojo/ready',
-		'app/util/Dialog',
-		'app/util/ProgressIndicator'
-	], function (Layout, dmConfig, domUtils, domClass, has, ready, Dialog, ProgressIndicator) {
+		'app/dmConfig',
+		'app/layout/layout',
+		'dojo-mama/ModuleManager'
+	], function (
+		ready, dmConfig, layout, ModuleManager
+	) {
 		ready(function() {
-
-			if (!has('touch')) {
-				domClass.add(document.getElementsByTagName('html')[0], 'no_touch');
-			}
-
-			var layout = new Layout({config: dmConfig}),
-				layoutReady = layout.startup(),
-				pi = new ProgressIndicator();
-
-			pi.placeAt(document.body);
-			pi.start();
-
-			layoutReady.then(function() {
-
-				// render cufon fonts for Winblows Mobile
-				domUtils.cufonify();
-
-				domUtils.injectNavSpinners(layout);
-
-				// stop the progress indicator
-				pi.stop();
-
-				// check for cookies
-				(function() {
-					var cookieEnabled = (navigator.cookieEnabled) ? true : false,
-						dialog;
-					if (typeof navigator.cookieEnabled == "undefined" && !cookieEnabled) {
-						document.cookie="testcookie";
-						cookieEnabled = (document.cookie.indexOf("testcookie") != -1) ? true : false;
-					}
-					if (!cookieEnabled) {
-						dialog = new Dialog({
-							blocking: true,
-							title: 'Please Enable Cookies',
-							message: 'It appears that your browser does not have cookies enabled, a requirement for this online application. Please	enable cookies before continuing.',
-							'class': 'cookieError'
-						});
-						dialog.show();
-					}
-				}());
+			var moduleManager;
+			layout.startup();
+			moduleManager = new ModuleManager({
+				config: dmConfig
 			});
+			moduleManager.startup();
 		});
 	});
 });

@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8">
-    <title>dojo-mama demo</title>
-	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<link rel="stylesheet" href="app/resources/css/app.css">
-	<link rel="apple-touch-icon-precomposed" sizes="57x57" href="app/resources/img/icons/app-icon-57x57ng" />
-	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="app/resources/img/icons/app-icon-72x72ng" />
-	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="app/resources/img/icons/app-icon-114x114.png" />
-	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="app/resources/img/icons/app-icon-144x144.png" />
-	<!--[if lt IE 9]>
-	<script src="static/es5-shim.js"></script>
-	<script src="static/respond.min.js"></script>
-	<![endif]-->
-</head>
-<body>
-    <script data-dojo-config="async: 1, tlmSiblingOfDojo: 0, isDebug: 1, cacheBust: 1, waitSeconds: 15" src="dojo/dojo.js"></script>
+    <title>My App</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="app/resources/css/app.css">
+  </head>
+  <body>
+    <noscript class="browserWarning">
+      <p>This site requires JavaScript. For help enabling JavaScript in your browser, <a href="http://www.enable-javascript.com/" target="_blank">please follow these instructions.</a></p>
+    </noscript>
+    <div style="visibility: hidden" class="layout">
+      <header><a href="/" class="title">My App</a></header>
+      <nav>
+        <ul>
+          <li><a href="/#/">Home</a></li>
+          <li><a href="/#/demo">Demo</a></li>
+        </ul>
+      </nav>
+      <div id="mainContainer">
+        <section id="main" role="main"></section>
+      </div>
+    </div>
+    <script src="vendor.js"></script>
+    <script data-dojo-config="async:1,tlmSiblingOfDojo:0,isDebug:true,cacheBust:1,waitSeconds:15" src="dojo/dojo.js"></script>
     <script src="app/run.js"></script>
-	<noscript>
-		<p>
-			This site requires JavaScript. For help enabling JavaScript in your browser,
-			<a href="http://www.enable-javascript.com/" target="_blank">please follow these instructions</a>.
-		</p>
-	</noscript>
-</body>
+  </body>
 </html>

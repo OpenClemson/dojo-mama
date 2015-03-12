@@ -1,0 +1,49 @@
+// Media Query Ranges
+
+// xsmall accounts for all iPhones below 6
+@xsmall-min: 0em;
+@xsmall-max: 374px;
+
+@small-min: 0em;
+@small-max: 40em;
+
+@medium-min: 40.063em;
+@medium-max: 64em;
+
+@large-min: 64.063em;
+@large-max: 90em;
+
+@xlarge-min: 90.063em;
+@xlarge-max: 120em;
+
+@xxlarge-min: 120.063em;
+@xxlarge-max: 99999999em;
+
+@screen: "only screen";
+
+@landscape: ~"@{screen} and (orientation: landscape)";
+@portrait: ~"@{screen} and (orientation: portrait)";
+
+@xsmall-only: ~"@{screen} and (max-width: @{xsmall-max})";
+
+@small-up: @screen;
+@small-only: ~"@{screen} and (max-width: @{small-max})";
+
+@medium-up: ~"@{screen} and (min-width:@{medium-min})";
+@medium-only: ~"@{screen} and (min-width:@{medium-min}) and (max-width:@{medium-max})";
+@medium-down: ~"@{screen} and (max-width:@{medium-max})";
+
+@large-up: ~"@{screen} and (min-width:@{large-min})";
+@large-only: ~"@{screen} and (min-width:@{large-min}) and (max-width:@{large-max})";
+
+@xlarge-up: ~"@{screen} and (min-width:@{xlarge-min})";
+@xlarge-only: ~"@{screen} and (min-width:@{xlarge-min}) and (max-width:@{xlarge-max})";
+
+@xxlarge-up: ~"@{screen} and (min-width:@{xxlarge-min})";
+@xxlarge-only: ~"@{screen} and (min-width:@{xxlarge-min}) and (max-width:@{xxlarge-max})";
+
+// iPhone 4+4s
+@iphone-480-min: 0px;
+@iphone-480-max: 480px;
+
+@iphone-480-only: ~"@{screen} and (max-height: @{iphone-480-max})";

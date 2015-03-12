@@ -1,7 +1,14 @@
+.DS_Store
+src/app/resources/css
 dist
-profiles/app-*.profile.js
 src/dojo
 src/dojox
 src/dijit
 src/util
-src/app/resources/css
+node_modules
+bower_components
+profiles/development.profile.js
+profiles/production.profile.js
+src/index.html
+src/vendor.js
+src/srv/vendor

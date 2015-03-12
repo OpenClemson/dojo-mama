@@ -1,6 +1,6 @@
 /*
 dojo-mama: a JavaScript framework
-Copyright (C) 2014 Clemson University
+Copyright (C) 2015 Clemson University
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -11,138 +11,124 @@ This library is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 Lesser General Public License for more details.
-
+        
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-
 define(['dojo/_base/declare',
-		'dojo/_base/kernel',
 		'dojo/_base/lang',
-		'dojo/dom-construct',
+		'dojo/hash',
 		'dojo/router/RouterBase',
-		'dojo/topic',
-		'dijit/_WidgetBase',
-		'dojox/css3/transit'
-], function(declare, kernel, lang, domConstruct, RouterBase, topic, WidgetBase, transit) {
+		'dojo/topic'
+], function(declare, lang, hash, RouterBase, topic) {
 
 	// module:
 	//     dojo-mama/views/Module
 
-	return declare([WidgetBase], {
-		// summary:
-		//     The base module class
+	// utility methods for routing, from dojo/router/RouterBase.js
+	var idMatch = /:(\w[\w\d]*)/g,
+		idReplacement = '([^\\/]+)',
+		globMatch = /\*(\w[\w\d]*)/,
+		globReplacement = '(.+)';
 
-		baseClass: 'stretch',
+	var convertRouteToRegEx = function(/*String*/ route) {
+		// Sub in based on IDs and globs
+		route = route.replace(idMatch, idReplacement);
+		route = route.replace(globMatch, globReplacement);
+		// Make sure it's an exact match
+		route = '^' + route + '$';
+		return new RegExp(route);
+	};
+
+	var getParameterNames = function(/*String*/ route) {
+		var parameterNames = [],
+			match;
+		idMatch.lastIndex = 0;
+		while ((match = idMatch.exec(route)) !== null) {
+			parameterNames.push(match[1]);
+		}
+		if ((match = globMatch.exec(route)) !== null) {
+			parameterNames.push(match[1]);
+		}
+		return parameterNames.length ? parameterNames : null;
+	};
+
+	return declare([], {
+		// summary:
+		//     A base module class. The module publishes the following topics:
+		//
+		//     '/dojo-mama/activateModule'
+		//           Published when the module has been activated.
+		//           Receives a reference to the module.
+		//     '/dojo-mama/deactivateModule'
+		//           Published when the module has been deactivated
+		//           Receives a reference to the module.
+
 		// active: Boolean
-		//     Signifies if the module is currently selected
+		//     Represents the module's state
 		active: false,
-		// containerNode: Object
-		//     The module's container node, mixed in by the constructor
-		containerNode: null,
 		// config: [private] Object
-		//     The dmConfig config object
+		//     The config object
 		config: null,
-		// currentView: Object
-		//     The module's currently active view
+		// currentView: [private] Object
+		//     The currently active view
 		currentView: null,
-		// getMode: Function
-		//     Set by dojo-mama/ModuleManager, returns
-		//     the current mode, 'phone' or 'tablet'
-		getMode: null,
 		// moduleId: String
 		//     Contains the dojo path to the module
 		moduleId: '',
 		// name: String
 		//     The key used in dmConfig for this module
 		name: '',
-		// prevTransit: [private] Object
-		//     The previous view transition promise
-		prevTransit: null,
-		// rootView: Object
-		//     The primary view of this module
-		rootView: null,
 		// router: Object
-		//     A monkey-patched dojo/router/RouterBase to handle
-		//     module-relative routes
+		//     The module's router
 		router: null,
-		// routerBase: Object
-		//     A dojo/router/RouterBase
-		routerBase: null,
+		// routes: Array
+		//     The module's routes
+		routes: null,
 
-		constructor: function() {
-			this.config = kernel.global.dmConfig;
-			this.routerBase = new RouterBase();
-			// monkey-patch the router base
-			var go = lang.hitch(this, function(route) {
-				route = this.getAbsoluteRoute(route);
-				this.routerBase.go(route);
-			});
-			var register = lang.hitch(this, function(route, cb) {
-				route = this.getAbsoluteRoute(route);
-				this.routerBase.register(route, cb);
-			});
+		constructor: function(/*Object*/ args) {
+			lang.mixin(this, args);
+			// provide router methods
 			this.router = {
-				go: go,
-				register: register,
-				goToAbsoluteRoute: lang.hitch(this.routerBase, this.routerBase.go)
+				go: lang.hitch(this, function(route) {
+					hash(this.getRouteHref(route));
+				})
 			};
-		},
-
-		buildRendering: function() {
-			this.inherited(arguments);
-			domConstruct.place(this.domNode, this.containerNode);
+			this.routes = [];
 		},
 
 		startup: function() {
 			// summary:
-			//     Startup the module
-			this.inherited(arguments);
+			//     Invoked upon module instantiation,
+			//     startup should register any view routes
+			//     with this.router.register
+
+			// Override this function to register module routes!
 		},
 
 		activate: function(/*Object*/ e) {
 			// summary:
-			//     Activates a module, showing the current view.
-			//     May be used to initiate a module's background processing.
+			//     Activates a module.
 			// e:
-			//     The router event
-			console.log('activating', this.name);
-			this.set('active', true);
-			this.domNode.style.display = '';
-			if (!this.rootView) {
-				console.error('Module rootView is undefined');
-				return;
-			}
-
-			if (!this.routerBase._started) {
-				this.routerBase.startup();
-			}
-			this.handleRoute(e);
+			//     The router event, similar to a dojo/router event.
+			//     The event does not have preventDefault or stopImmediatePropagation
+			//     methods.
+			console.log('[dojo-mama] activating module:', this.name);
+			topic.publish('/dojo-mama/activateModule', this);
 		},
 
-		deactivate: function() {
+		deactivate: function(/*Object*/ e) {
 			// summary:
-			//     Deactivates a module, hiding the current view.
-			//     May be used to stop any background processing.
-			console.log('deactivating', this.name);
+			//     Deactivates a module.
+			// e:
+			//     The router event causing the module to be deactivated
+			console.log('[dojo-mama] deactivating module:', this.name);
+			topic.publish('/dojo-mama/deactivateModule', this);
 			if (this.currentView) {
 				this.currentView.deactivate();
 			}
-			this.set('active', false);
-			this.domNode.style.display = '';
-			if (this.currentView && this.currentView.domNode) {
-				this.currentView.domNode.style.display = 'none';
-			} else {
-				console.warn("Deactivate cannot hide current view. " +
-					"A view route may not have been registered. Module:", this);
-			}
 			this.currentView = null;
-
-			// empty out any optionalBar a view previously added to the subnav
-			topic.publish('/dojo-mama/updateSubNav', {
-				optionalBar: "empty"
-			});
 		},
 
 		getAbsoluteRoute: function(/*String?*/ route) {
@@ -152,8 +138,9 @@ define(['dojo/_base/declare',
 			//     A module-relative view route
 
 			// no trailing slashes
-			var r = route === '/' ? '' : route;
-			return this.config.baseRoute + this.name + r;
+			var r = (route === '/') ? '' : route,
+				base = (this.name === 'index') ? '' : this.name;
+			return '/' + base + r;
 		},
 
 		getRouteHref: function(/*String?*/ route) {
@@ -162,143 +149,56 @@ define(['dojo/_base/declare',
 			// route:
 			//     A module-relative view route
 
-			var r = route === '/' ? '' : route;
-			return '#' + this.config.baseRoute + this.name + r;
-		},
-
-		handleRoute: function(/*Object*/ e) {
-			// summary:
-			//    Handle a routing event
-			// e:
-			//    A dojo/router event
-			var view = e.params.view;
-			var match = false;
-			console.log("Module handling route");
-
-			// Check to see if any of this module's views are registered for the route
-			var i;
-			for (i = this.routerBase._routes.length - 1; i >= 0; i--) {
-				if (this.routerBase._routes[i].route.test(e.newPath)) {
-					match = true;
-					break;
-				}
-			}
-
-			if (match) {
-				console.log('Route matches');
-				this.router.go(view ? '/' + view : '/');
-			}
-			else {
-				console.log('No route match: showing 404');
-				topic.publish('/dojo-mama/show404', e);
-			}
+			return '#' + this.getAbsoluteRoute(route);
 		},
 
 		registerView: function(/*Object*/ view) {
 			// summary:
-			//     Add a view's DOM node to the module's container
-			//     and register the view's route with the router
+			//     Registers the view's route with the router, using view.route
+			//     as the route to invoke view.activate.
 			// view:
-			//     A dojo-mama/ModuleView
+			//     A dojo-mama/View
 
-			// register the view with the router
-			this.registerViewRoute(view, view.route);
 			// give the view a handle to its module
 			view.module = this;
 			// provide router methods
 			view.router = this.router;
-			view.placeAt(this.domNode);
-			view.startup();
+			// register the view with the router
+			this.registerViewRoute(view, view.route);
 		},
 
-		registerViewRoute: function(/*Object*/ view, /*Object*/ route, /*Function?*/ callback) {
+		registerViewRoute: function(/*Object*/ view, /*String*/ route, /*Function?*/ callback) {
 			// summary:
 			//     Register a view's route with the router
 			// view:
-			//     A dojo-mama/ModuleView
+			//     A dojo-mama/View
 			// route:
-			//     A dojo/router route
+			//     The view route, in the same format as a dojo/router String route
 			// callback:
-			//     A callback function passed to router.register().
+			//     The callback function to be invoked upon routing.
 			//     If not given, view.activate will be used as the callback and hitched to the view.
-			//     The callback will be called with the router's
-			//     routing event as described at the following link:
-			//     http://dojotoolkit.org/reference-guide/1.9/dojo/router.html#register
 
-			var viewCallback = callback || lang.hitch(view, view.activate),
-				routerCallback = lang.hitch(this, this.routeView, view, viewCallback);
-			this.router.register(route, routerCallback);
+			// register the route
+			this.routes.push({
+				callback: callback || lang.hitch(view, view.activate),
+				parameterNames: getParameterNames(route),
+				route: convertRouteToRegEx(route),
+				view: view
+			});
 		},
 
-		routeView: function(view, cb, e) {
+		destroy: function() {
 			// summary:
-			//     Route to a module view
-			// view:
-			//     The view to route to
-			// cb:
-			//     A callback to call after routing
-			// e:
-			//     The dojo/router event associated with this view
+			//     Destroys the module and its registered routes
 
-			console.log('routeView');
-			console.log(e);
-
-			// create a callback augmented with the route event as a parameter
-			// note: partial will return a function even if the first parameter is
-			// undefined
-			var callback = lang.partial(cb, e),
-				showTransition,
-				oldView = this.currentView,
-				postTransition;
-			
-			// show transition?
-			if (e.oldPath &&  // if we're not deep linking
-				e.newPath !== this.config.baseRoute &&  // we're not at the index
-				oldView &&  // a previous view exists
-				oldView !== view &&  // the old view isn't the one we're showing
-				this.getMode() === 'phone'  // and we're in mobile mode
-			) {
-				showTransition = true;
-			} else {
-				showTransition = false;
-			}
-
-			postTransition = function() {
-				if (oldView) {
-					oldView.domNode.style.display = 'none';
-				}
-				view.domNode.style.display = '';
-			};
-
-			// update the sub nav
-			// TODO take this out of core
-			topic.publish('/dojo-mama/updateSubNav', {
-				back: view.parentView ? this.getAbsoluteRoute(view.parentView) : '/',
-				title: view.title || (this.title || '')
-			});
-
-			// perform view transition
-			view.domNode.style.display = '';
-			if (showTransition) {
-				if (this.prevTransit && !this.prevTransit.isFulfilled()) {
-					this.prevTransit.cancel();
-				}
-				this.prevTransit = transit(oldView.domNode, view.domNode, {
-					transition: 'fade',
-					duration: this.config.transitionDuration
-				});
-				this.prevTransit.then(postTransition, postTransition);
-			} else {
-				postTransition();
-			}
-
-			// activate/deativate views
-			if (oldView && view !== oldView) {
-				oldView.deactivate();
-			}
-			this.currentView = view;
-			callback();
-
+			console.log('[dojo-mama] destroying module:', this.name);
+			this.active = false;
+			this.config = null;
+			this.currentView = null;
+			this.moduleId = '';
+			this.name = '';
+			this.router = null;
+			this.routes = [];
 		}
 
 	});

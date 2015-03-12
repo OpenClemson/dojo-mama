@@ -3,20 +3,18 @@
 	"version": "0.0.5",
 	"description": "A framework for dojo mobile adaptive modular applications",
 	"bugs": "mailto:mobile-admin@lists.clemson.edu",
-	"keywords": ["JavaScript", "Dojo", "Mobile", "Responsive", "Mama"],
+	"keywords": ["JavaScript", "Dojo", "Module", "Router"],
 	"maintainers": [{
+	},{
 		"name": "Dan Lewis",
 		"email": "jdanl@clemson.edu"
-	},{
-		"name": "Nick Watts",
-		"email": "watts4@clemson.edu"
 	}],
 	"contributors": [{
-		"name": "Doug Dawson",
-		"email": "dawson3@clemson.edu"
+		"name": "Nick Watts",
+		"email": "watts4@clemson.edu"
 	},{
-		"name": "Josh Groppe",
-		"email": "charle8@g.clemson.edu"
+		"name": "Tyler Thompson",
+		"email": "tpthomp@clemson.edu"
 	}],
 	"main": "main",
 	"dependencies": {
@@ -27,8 +25,8 @@
 	},
 	"licenses": [
 		{
-			"type": "LGPL 2.1",
-			"url": "ihttps://www.gnu.org/licenses/old-licenses/lgpl-2.1.html"
+			"type": "GNU General Public License, version 2",
+			"url": "http://www.gnu.org/licenses/gpl-2.0.html"
 		}
 	],
 	"dojoBuild": "package.js"

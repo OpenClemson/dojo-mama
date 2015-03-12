@@ -1,0 +1,56 @@
+@top: 35px;
+
+html,
+body
+{
+	height: 100%;
+	overflow-x: hidden;
+}
+
+body {
+	background: @background;
+	position: relative;
+	width: 100%;
+}
+
+header {
+	background: #eee;
+	padding: .5em;
+	font-weight: bold;
+	height: @top;
+}
+
+nav {
+	position: absolute;
+	left: 0;
+	top: @top;
+	width: 100px;
+	bottom: 0;
+	ul {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		li {
+			margin: .5em;
+			display: block;
+		}
+	}
+}
+
+#mainContainer {
+	-webkit-overflow-scrolling: touch;
+	overflow-x: hidden;
+	overflow-y: auto;
+	position: absolute;
+	left: 100px;
+	top: @top;
+	right: 0;
+	bottom: 0;
+
+}
+
+/* View transitions */
+#main > div {
+	transition: opacity .2s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+

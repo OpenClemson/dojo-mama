@@ -1,16 +1,18 @@
-
 all: prod
 
 install:
-	cd scripts; ./install && ./compile_less
+	npm prune
+	npm install
+	bower prune
+	bower install
+	gulp install
 
-css:
-	cd scripts; ./compile_less
+dev: install
+	gulp build
+	gulp release
 
-prod:
-	cd scripts/build; ./build
+prod: install
+	gulp build --production
+	gulp release --production
 
-dev:
-	cd scripts/build; ./build app development
-
-.PHONY: install css prod dev release release-dev
+.PHONY: all install dev prod 

@@ -1,0 +1,23 @@
+{
+	// More details @ http://www.jshint.com/docs/options/
+
+	// Predefined globals that JSHint ignores
+	"browser": true,  // standard globals like 'window'
+	"devel": true, // development globals, e.g. 'console'
+	"dojo": true, // dojo
+
+	// Enforcing
+	"bitwise": true, // prohibit the use of bitwise operations (slow and '&' is usually supposed to be '&&')
+	"curly": true, // require {} for all blocks/scopes
+	"latedef": "nofunc", // prohibit variable use before definition ("hoisting")
+	"noempty": true, // prohibit empty blocks
+	"trailing": true, // no trailing whitespace is allowed
+	"undef": true, // prevent the use of undeclared variables
+	"forin": true, // check hasOwnProperty in forin loops
+	"newcap": true,  // use new operator with capitalized vars
+	"trailing": true, // no trailing whitespace
+
+	// Relaxing
+	"eqnull": true  // don't warn about == null
+
+}
