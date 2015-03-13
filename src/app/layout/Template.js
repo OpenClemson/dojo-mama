@@ -20,9 +20,8 @@ define(['dojo/_base/declare',
 		'dijit/_WidgetBase',
 		'dojox/dtl/_Templated',
 		'dojox/dtl/tag/logic',
-		'dojox/dtl/filter/htmlstrings',
-		'app/layout/_ViewMixin'
-], function(declare, _WidgetBase, _Templated, logic, htmlstrings, ViewMixin) {
-	return declare([ViewMixin, _WidgetBase, _Templated], {
+		'dojox/dtl/filter/htmlstrings'
+], function(declare, _WidgetBase, _Templated, logic, htmlstrings) {
+	return declare([_WidgetBase, _Templated], {
 	});
 });

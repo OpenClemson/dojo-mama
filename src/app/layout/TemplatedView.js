@@ -17,24 +17,9 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 define(['dojo/_base/declare',
-		'app/layout/TemplatedView',
-		'dojo/text!app/demo/subview.html'
-], function(declare, TemplatedView, template) {
-	return declare([TemplatedView], {
-		route: '/:page',
-		title: 'Demo',
-		templateString: template,
-
-		// a template dom ndoe
-		outputNode: null,
-		count: 0,
-
-		activate: function(e) {
-			this.inherited(arguments);
-			this.count++;
-			this.render();
-			this.outputNode.innerHTML = e.params.page;
-		}
-
+		'app/layout/Template',
+		'app/layout/_ViewMixin'
+], function(declare, Template, ViewMixin) {
+	return declare([ViewMixin, Template], {
 	});
 });
