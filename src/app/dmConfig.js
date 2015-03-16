@@ -23,6 +23,8 @@ if (typeof define !== 'function') { define = require('amdefine')(module); }
 
 // app configuration
 define({
+	networkErrorMessage: "There seems to be a network issue.",
+	networkTimeout: 15000,
 	modules: {
 		index: {
 			moduleId: 'app/layout/index/Module'
@@ -30,6 +32,28 @@ define({
 		demo: {
 			title: 'Demo',
 			moduleId: 'app/demo/Module'
+		},
+		crudExample: {
+			title: 'Crud Example',
+			moduleId: 'app/crudExample/Module',
+			modules: ['veggies', 'fruits']
+		},
+
+
+		/* Module Groups */
+		veggies: {
+			title: 'Veggies',
+			moduleId: 'app/crudExample/veggies/Module',
+			selectedPrimaryNavItem: 'Veggies',
+			baseServiceUrl: 'srv/crudExample/'
+		},
+
+		fruits: {
+			title: 'Fruits',
+			moduleId: 'app/crudExample/fruits/Module',
+			selectedPrimaryNavItem: 'fruits',
+			baseServiceUrl: 'srv/crudExample/'
 		}
+
 	}
 });

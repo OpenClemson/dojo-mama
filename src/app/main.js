@@ -34,6 +34,7 @@ define(['require'], function (require) {
 	], function (
 		ready, dmConfig, layout, ModuleManager
 	) {
+		window.dmConfig = dmConfig;
 		ready(function() {
 			var moduleManager;
 			layout.startup();
