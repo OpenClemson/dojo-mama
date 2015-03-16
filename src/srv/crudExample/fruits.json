@@ -1,0 +1,306 @@
+{
+	"properties": {
+		"types": {
+			"defaults": {
+				"creatable": false,
+				"emptyLabel": "NoLabel"
+			},
+			"good": {
+				"categoryLabel": "Good Fruits",
+				"creatable": true,
+				"createLabel": "Add Fruit"
+			},
+			"meh": {
+				"categoryLabel": "Meh Fruits"
+			},
+			"bad": {
+				"categoryLabel": "BAAD fruits"
+			}
+		},
+		"displayOrder": [
+			"good",
+			"meh",
+			"bad"
+		],
+		"display": true,
+		"edit": true,
+		"create": true,
+		"remove": true,
+		"create_properties": {
+			"good": {
+				"deletable": true,
+				"meta": {
+					"type": "good"
+				},
+				"defaults": {
+					"required": true,
+					"editable": true,
+					"type": "text"
+				},
+				"fields": [
+					{
+						"id": "label",
+						"label": "Fruit Name"
+					},
+					{
+						"id": "color",
+						"type": "select",
+						"label": "Color",
+						"options": [
+							{ "label" : "None", "value": 0 },
+							{ "label" : "Red", "value": 1 },
+							{ "label" : "Not Red", "value": 2 }
+						]
+					}
+				]
+			}
+		}			
+	},
+	"items": [
+		{
+			"data": {
+				"label": "Apple",
+				"color": 1,
+				"objectId": "fruits#good#0",
+				"objectURI": "fruits/fruits%23good%230"
+			},
+			"properties": {
+				"deletable": true,
+				"meta": {
+					"type": "good"
+				},
+				"defaults": {
+					"required": true,
+					"editable": true,
+					"type": "text"
+				},
+				"fields": [
+					{
+						"id": "label",
+						"label": "Fruit Name"
+					},
+					{
+						"id": "color",
+						"type": "select",
+						"label": "Color",
+						"options": [
+							{ "label" : "None", "value": 0 },
+							{ "label" : "Red", "value": 1 },
+							{ "label" : "Not Red", "value": 2 }
+						]
+					}
+				]
+			}
+		},
+		{
+			"data": {
+				"label": "Banana",
+				"color": 2,
+				"objectId": "fruits#good#1",
+				"objectURI": "fruits/fruits%23good%231"
+			},
+			"properties": {
+				"deletable": true,
+				"meta": {
+					"type": "good"
+				},
+				"defaults": {
+					"required": true,
+					"editable": true,
+					"type": "text"
+				},
+				"fields": [
+					{
+						"id": "label",
+						"label": "Fruit Name"
+					},
+					{
+						"id": "color",
+						"type": "select",
+						"label": "Color",
+						"options": [
+							{ "label" : "None", "value": 0 },
+							{ "label" : "Red", "value": 1 },
+							{ "label" : "Not Red", "value": 2 }
+						]
+					}
+				]
+			}
+		},
+		{
+			"data": {
+				"label": "Cherry",
+				"color": 1,
+				"objectId": "fruits#good#2",
+				"objectURI": "fruits/fruits%23good%232"
+			},
+			"properties": {
+				"deletable": true,
+				"meta": {
+					"type": "good"
+				},
+				"defaults": {
+					"required": true,
+					"editable": true,
+					"type": "text"
+				},
+				"fields": [
+					{
+						"id": "label",
+						"label": "Fruit Name"
+					},
+					{
+						"id": "color",
+						"type": "select",
+						"label": "Color",
+						"options": [
+							{ "label" : "None", "value": 0 },
+							{ "label" : "Red", "value": 1 },
+							{ "label" : "Not Red", "value": 2 }
+						]
+					}
+				]
+			}
+		},
+		{
+			"data": {
+				"label": "Grape",
+				"color": 2,
+				"objectId": "fruits#meh#0",
+				"objectURI": "fruits/fruits%23meh%230"
+			},
+			"properties": {
+				"deletable": false,
+				"meta": {
+					"type": "meh"
+				},
+				"defaults": {
+					"required": true,
+					"editable": true,
+					"type": "text"
+				},
+				"fields": [
+					{
+						"id": "label",
+						"label": "Fruit Name"
+					},
+					{
+						"id": "color",
+						"type": "select",
+						"label": "Color",
+						"options": [
+							{ "label" : "None", "value": 0 },
+							{ "label" : "Red", "value": 1 },
+							{ "label" : "Not Red", "value": 2 }
+						]
+					}
+				]
+			}
+		},
+		{
+			"data": {
+				"label": "Pear",
+				"color": 2,
+				"objectId": "fruits#meh#1",
+				"objectURI": "fruits/fruits%23meh%231"
+			},
+			"properties": {
+				"deletable": false,
+				"meta": {
+					"type": "meh"
+				},
+				"defaults": {
+					"required": true,
+					"editable": true,
+					"type": "text"
+				},
+				"fields": [
+					{
+						"id": "label",
+						"label": "Fruit Name"
+					},
+					{
+						"id": "color",
+						"type": "select",
+						"label": "Color",
+						"options": [
+							{ "label" : "None", "value": 0 },
+							{ "label" : "Red", "value": 1 },
+							{ "label" : "Not Red", "value": 2 }
+						]
+					}
+				]
+			}
+		},
+		{
+			"data": {
+				"label": "Plum",
+				"color": 2,
+				"objectId": "fruits#bad#0",
+				"objectURI": "fruits/fruits%23bad%230"
+			},
+			"properties": {
+				"deletable": false,
+				"meta": {
+					"type": "bad"
+				},
+				"defaults": {
+					"required": true,
+					"editable": true,
+					"type": "text"
+				},
+				"fields": [
+					{
+						"id": "label",
+						"label": "Fruit Name"
+					},
+					{
+						"id": "color",
+						"type": "select",
+						"label": "Color",
+						"options": [
+							{ "label" : "None", "value": 0 },
+							{ "label" : "Red", "value": 1 },
+							{ "label" : "Not Red", "value": 2 }
+						]
+					}
+				]
+			}
+		},
+		{
+			"data": {
+				"label": "Grapple",
+				"color": 1,
+				"objectId": "fruits#bad#1",
+				"objectURI": "fruits/fruits%23bad%231"
+			},
+			"properties": {
+				"deletable": false,
+				"meta": {
+					"type": "good"
+				},
+				"defaults": {
+					"required": true,
+					"editable": true,
+					"type": "text"
+				},
+				"fields": [
+					{
+						"id": "label",
+						"label": "Fruit Name"
+					},
+					{
+						"id": "color",
+						"type": "select",
+						"label": "Color",
+						"options": [
+							{ "label" : "None", "value": 0 },
+							{ "label" : "Red", "value": 1 },
+							{ "label" : "Not Red", "value": 2 }
+						]
+					}
+				]
+			}
+		}
+	]
+}
