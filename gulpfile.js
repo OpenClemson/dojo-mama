@@ -66,7 +66,6 @@ var
 	less = require('gulp-less'),
 	minifyCSS = require('gulp-minify-css'),
 	minifyHTML = require('gulp-minify-html'),
-	phplint = require('phplint'),
 	plumber = require('gulp-plumber'),
 	prefix = require('gulp-autoprefixer'),
 	rename = require('gulp-rename'),
@@ -234,10 +233,6 @@ gulp.task('jshint', function() {
 		.pipe(jshint.reporter('fail'));
 });
 
-gulp.task('phplint', function() {
-	return phplint(['src/srv/**/*.php', '!src/srv/vendor/**']);
-});
-
 gulp.task('post-build-clean', function(cb) {
 	if (config.development) {
 		return cb();
@@ -290,7 +285,7 @@ gulp.task('watch', ['resources'], function() {
 
 gulp.task('default', ['watch']);
 gulp.task('dependencies', ['vendor-js', 'dojo-dependencies', 'composer']);
-gulp.task('lint', ['jshint', 'phplint']);
+gulp.task('lint', ['jshint']);
 gulp.task('resources', ['css', 'jade', 'jade-templates']);
 
 gulp.task('install', function(cb) {
